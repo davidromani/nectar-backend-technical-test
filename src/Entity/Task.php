@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Traits\DateTrait;
@@ -20,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'Task',
     description: 'A task.',
     operations: [
+        new GetCollection(),
         new Post(),
         new Patch(),
         new Delete(),
@@ -29,8 +33,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     denormalizationContext: [
         'groups' => ['task:write'],
-    ]
+    ],
+    paginationItemsPerPage: 100,
 )]
+#[ApiFilter(NumericFilter::class, properties: ['status'])]
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\Table(name: 'task')]
 class Task extends AbstractBase
@@ -59,6 +65,7 @@ class Task extends AbstractBase
 
     #[Assert\Date]
     #[Assert\NotNull]
+    #[Groups(['task:write'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false)]
     private ?\DateTimeInterface $date;
 
