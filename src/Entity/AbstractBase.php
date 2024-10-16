@@ -9,6 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 abstract class AbstractBase
 {
+    public const string DEFAULT_ROLE_USER = 'ROLE_USER';
     public const string DEFAULT_NULL_STRING = '---';
     public const string DEFAULT_NULL_DATE_STRING = '--/--/----';
     public const string DEFAULT_NULL_DATETIME_STRING = '--/--/---- --:--';
