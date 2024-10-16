@@ -6,6 +6,7 @@ use App\Enum\BooleanEnum;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 abstract class AbstractBase
 {
@@ -21,6 +22,7 @@ abstract class AbstractBase
     public const string DATABASE_DATE_STRING_FORMAT = 'Y-m-d';
     public const string DATABASE_DATETIME_STRING_FORMAT = 'Y-m-d H:i:s';
 
+    #[Groups(['task:read', 'user:read'])]
     #[ORM\Column]
     #[ORM\GeneratedValue]
     #[ORM\Id]

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Traits\EmailTrait;
 use App\Entity\Traits\NameTrait;
 use App\Repository\UserRepository;
@@ -11,8 +13,23 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[ApiResource(
+    shortName: 'User',
+    description: 'A user.',
+    operations: [
+        new Post(),
+    ],
+    normalizationContext: [
+        'groups' => ['user:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['user:write'],
+    ],
+    paginationItemsPerPage: 100,
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -26,10 +43,12 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
 
     #[Assert\Email]
     #[Assert\NotNull]
+    #[Groups(['user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
     private ?string $email = null;
 
     #[Assert\NotNull]
+    #[Groups(['user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $name = null;
 
@@ -37,6 +56,7 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     private array $roles = [];
 
     #[Assert\NotNull]
+    #[Groups(['user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $password = null;
 

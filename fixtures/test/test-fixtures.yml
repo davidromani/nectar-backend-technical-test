@@ -1,0 +1,21 @@
+App\Entity\User:
+  user_{1..10000}:
+    name: 'user<current()>'
+    email: '<current()>email@email.com'
+    password: 'password<current()>'
+    roles:
+      - 'ROLE_USER'
+
+App\Entity\Task:
+  task_{1..5000}:
+    user: '@user_<current()>'
+    title: '<current()> <sentence()>'
+    description: '<current()> <paragraph()>'
+    date: '<dateTimeThisMonth()>'
+    status: 0
+  task_{5001..10000}:
+    user: '@user_<current()>'
+    title: '<current()> <sentence()>'
+    description: '<current()> <paragraph()>'
+    date: '<dateTimeThisMonth()>'
+    status: 1
