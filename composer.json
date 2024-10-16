@@ -88,8 +88,11 @@
         "hautelook/alice-bundle": "^2.14",
         "phpunit/phpunit": "^10.5",
         "roave/security-advisories": "dev-latest",
+        "symfony/browser-kit": "6.4.*",
+        "symfony/css-selector": "6.4.*",
         "symfony/debug-bundle": "6.4.*",
-        "symfony/maker-bundle": "^1.61",
+        "symfony/maker-bundle": "^1.0",
+        "symfony/phpunit-bridge": "^7.1",
         "symfony/stopwatch": "6.4.*",
         "symfony/web-profiler-bundle": "6.4.*"
     }
