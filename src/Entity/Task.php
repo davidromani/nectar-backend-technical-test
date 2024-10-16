@@ -13,15 +13,23 @@ use App\Enum\TaskStatusEnum;
 use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    shortName: 'Task',
     description: 'A task.',
     operations: [
         new Post(),
         new Patch(),
         new Delete(),
     ],
+    normalizationContext: [
+        'groups' => ['task:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['task:write'],
+    ]
 )]
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\Table(name: 'task')]
@@ -31,17 +39,21 @@ class Task extends AbstractBase
     use DescriptionTrait;
     use TitleTrait;
 
+    #[Groups(['task:write'])]
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
     private User $user;
 
     #[Assert\NotNull]
+    #[Groups(['task:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $title = null;
 
+    #[Groups(['task:write'])]
     #[ORM\Column(type: Types::TEXT, length: 4000, nullable: true)]
     private ?string $description = null;
 
+    #[Groups(['task:write'])]
     #[ORM\Column(type: Types::INTEGER, nullable: false, options: ['default' => TaskStatusEnum::PENDING->value])]
     private int $status = TaskStatusEnum::PENDING->value;
 
