@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Entity\Traits\EmailTrait;
 use App\Entity\Traits\NameTrait;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -19,6 +21,9 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     use EmailTrait;
     use NameTrait;
 
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'user')]
+    private Collection $tasks;
+
     #[Assert\Email]
     #[Assert\NotNull]
     #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
@@ -31,8 +36,44 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     #[ORM\Column]
     private array $roles = [];
 
-    #[ORM\Column]
+    #[Assert\NotNull]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $password = null;
+
+    public function __construct()
+    {
+        $this->tasks = new ArrayCollection();
+    }
+
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function setTasks(Collection $tasks): self
+    {
+        $this->tasks = $tasks;
+
+        return $this;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->contains($task)) {
+            $this->tasks->removeElement($task);
+        }
+
+        return $this;
+    }
 
     public function getUserIdentifier(): string
     {
