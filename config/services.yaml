@@ -1,5 +1,9 @@
+imports:
+    - { resource: 'admins.yaml' }
+
 parameters:
     app_default_locale: '%env(string:APP_DEFAULT_LOCALE)%'
+    app_project_title: '%env(string:APP_PROJECT_TITLE)%'
 
 services:
     _defaults:

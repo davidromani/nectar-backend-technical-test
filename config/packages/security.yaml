@@ -18,7 +18,7 @@ security:
         - { path: ^/admin/login$, role: 'PUBLIC_ACCESS' }
         - { path: ^/admin/logout$, role: 'PUBLIC_ACCESS' }
         - { path: ^/admin/login_check$, role: 'PUBLIC_ACCESS' }
-        - { path: ^/admin, roles: 'ROLE_ADMIN' }
+        - { path: ^/admin, roles: 'PUBLIC_ACCESS' }
         - { path: ^/.*, role: 'PUBLIC_ACCESS' }
 
 when@test:
