@@ -25,4 +25,9 @@ class AbstractBaseAdmin extends AbstractAdmin
             ->remove('batch')
         ;
     }
+
+    protected function isFormToCreateNewRecord(): bool
+    {
+        return !$this->id($this->getSubject());
+    }
 }

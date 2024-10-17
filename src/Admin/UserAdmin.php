@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 final class UserAdmin extends AbstractBaseAdmin
 {
@@ -105,7 +106,14 @@ final class UserAdmin extends AbstractBaseAdmin
             )
             ->add('name')
             ->add('email')
-            ->add('password')
+            ->add(
+                'plainPassword',
+                PasswordType::class,
+                [
+                    'label' => $this->isFormToCreateNewRecord() ? 'New Password' : 'Update Password',
+                    'required' => $this->isFormToCreateNewRecord(),
+                ]
+            )
             ->end()
             ->with(
                 'Controls',

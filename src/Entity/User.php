@@ -55,10 +55,11 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     #[ORM\Column]
     private array $roles = [];
 
-    #[Assert\NotNull]
     #[Groups(['user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $password = null;
+
+    private ?string $plainPassword;
 
     public function __construct()
     {
@@ -129,6 +130,19 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }
