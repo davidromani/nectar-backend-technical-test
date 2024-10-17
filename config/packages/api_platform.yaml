@@ -1,0 +1,8 @@
+api_platform:
+    title: '%app_project_title% API'
+    version: '%app_version%'
+    show_webby: false
+    defaults:
+        stateless: true
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']

@@ -1,0 +1,15 @@
+twig:
+    file_name_pattern: '*.twig'
+    globals:
+        app_is_in_staging_mode: false
+        app_version: '%app_version%'
+        app_project_title: '%app_project_title%'
+
+when@dev:
+    twig:
+        globals:
+            app_is_in_staging_mode: true
+
+when@test:
+    twig:
+        strict_variables: true

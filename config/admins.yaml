@@ -1,0 +1,9 @@
+services:
+    admin.user:
+        class: 'App\Admin\UserAdmin'
+        tags:
+            - { name: 'sonata.admin', model_class: 'App\Entity\User', controller: ~, manager_type: 'orm', label: 'User', group: 'Admin' }
+    admin.task:
+        class: 'App\Admin\TaskAdmin'
+        tags:
+            - { name: 'sonata.admin', model_class: 'App\Entity\Task', controller: ~, manager_type: 'orm', label: 'Task', group: 'Admin' }

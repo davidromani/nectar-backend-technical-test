@@ -1,0 +1,65 @@
+security:
+    role_hierarchy:
+        ROLE_SONATA_CMS:
+            - 'ROLE_ADMIN_USER_ALL'
+            - 'ROLE_ADMIN_TASK_ALL'
+        ROLE_CMS:
+            - 'ROLE_USER'
+            - 'ROLE_SONATA_ADMIN'
+            - 'ROLE_SONATA_CMS'
+        ROLE_ADMIN:
+            - 'ROLE_CMS'
+        ROLE_SUPER_ADMIN:
+            - 'ROLE_ADMIN'
+            - 'ROLE_ALLOWED_TO_SWITCH'
+    password_hashers:
+        App\Entity\User:
+            algorithm: 'auto'
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+            algorithm: 'plaintext' # <- only for admin in memory users testing purpose
+    providers:
+        app_user_provider:
+            entity:
+                class: 'App\Entity\User'
+                property: 'email'
+        admin_user_in_memory_provider:
+            memory:
+                users:
+                    admin: { password: '%app_admin_user_password%', roles: [ 'ROLE_ADMIN' ] }
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        admin:
+            lazy: true
+            pattern: '^/admin(.*)'
+            context: 'admin'
+            provider: 'admin_user_in_memory_provider'
+            form_login:
+                login_path: 'admin_app_login'
+                check_path: 'admin_app_login'
+                failure_path: 'admin_app_login'
+                username_parameter: 'username'
+                password_parameter: 'password'
+                enable_csrf: true
+            logout:
+                path: 'admin_app_logout'
+                target: 'admin_app_login'
+        frontend:
+            lazy: true
+            pattern: '^/(.*)'
+            context: 'user'
+    access_control:
+        - { path: ^/api, roles: 'PUBLIC_ACCESS' }
+        - { path: ^/admin/login$, role: 'PUBLIC_ACCESS' }
+        - { path: ^/admin/logout$, role: 'PUBLIC_ACCESS' }
+        - { path: ^/admin/login_check$, role: 'PUBLIC_ACCESS' }
+        - { path: ^/admin, roles: 'ROLE_ADMIN' }
+        - { path: ^/.*, role: 'PUBLIC_ACCESS' }
+
+when@test:
+    security:
+        firewalls:
+            admin:
+                http_basic: ~
+                entry_point: 'http_basic'
