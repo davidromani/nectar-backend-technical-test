@@ -21,5 +21,6 @@ services:
     App\Menu\AdminTopRightNavMenuBuilder:
         arguments:
             - '@knp_menu.factory'
+            - '@security.helper'
         tags:
             - { name: 'knp_menu.menu_builder', method: 'createTopRightUserNavMenu', alias: 'admin_user_top_right_nav_menu' }
