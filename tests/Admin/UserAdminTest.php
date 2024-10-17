@@ -2,17 +2,15 @@
 
 namespace App\Tests\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserAdminTest extends WebTestCase
+class UserAdminTest extends BaseAdminTest
 {
     public function testSuccessfulPages(): void
     {
-        $client = static::createClient();
         foreach (self::provideSuccessfulUrls() as $url) {
-            $client->request(Request::METHOD_GET, $url);
+            $this->kernelBrowserClient->request(Request::METHOD_GET, $url);
             self::assertResponseIsSuccessful();
         }
     }
@@ -29,9 +27,8 @@ class UserAdminTest extends WebTestCase
 
     public function testNotFoundPages(): void
     {
-        $client = static::createClient();
         foreach (self::provideNotFoundUrls() as $url) {
-            $client->request(Request::METHOD_GET, $url);
+            $this->kernelBrowserClient->request(Request::METHOD_GET, $url);
             self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
         }
     }
