@@ -55,10 +55,11 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     #[ORM\Column]
     private array $roles = [];
 
-    #[Assert\NotNull]
     #[Groups(['user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $password = null;
+
+    private ?string $plainPassword;
 
     public function __construct()
     {
@@ -68,6 +69,11 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     public function getTasks(): Collection
     {
         return $this->tasks;
+    }
+
+    public function getTasksAmount(): int
+    {
+        return $this->getTasks()->count();
     }
 
     public function setTasks(Collection $tasks): self
@@ -128,9 +134,27 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
         return $this;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
+    }
+
+    public function __toString(): string
+    {
+        return $this->id ? sprintf('%s (%s)', $this->getName(), $this->getEmail()) : AbstractBase::DEFAULT_NULL_STRING;
     }
 }
