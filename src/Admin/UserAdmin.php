@@ -52,6 +52,14 @@ final class UserAdmin extends AbstractBaseAdmin
                 ]
             )
             ->add(
+                'password',
+                FieldDescriptionInterface::TYPE_STRING,
+                [
+                    'editable' => false,
+                    'sortable' => false,
+                ]
+            )
+            ->add(
                 'tasksAmount',
                 FieldDescriptionInterface::TYPE_INTEGER,
                 [

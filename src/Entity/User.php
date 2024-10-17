@@ -138,4 +138,9 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+    public function __toString(): string
+    {
+        return $this->id ? sprintf('%s (%s)', $this->getName(), $this->getEmail()) : AbstractBase::DEFAULT_NULL_STRING;
+    }
 }
