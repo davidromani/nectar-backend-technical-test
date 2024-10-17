@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserAdminTest extends WebTestCase
+class TaskAdminTest extends WebTestCase
 {
     public function testSuccessfulPages(): void
     {
@@ -20,10 +20,9 @@ class UserAdminTest extends WebTestCase
     public static function provideSuccessfulUrls(): array
     {
         return [
-            '/admin/dashboard',
-            '/admin/user/list',
-            '/admin/user/create',
-            '/admin/user/1/edit',
+            '/admin/task/list',
+            '/admin/task/create',
+            '/admin/task/1/edit',
         ];
     }
 
@@ -39,10 +38,10 @@ class UserAdminTest extends WebTestCase
     public static function provideNotFoundUrls(): array
     {
         return [
-            '/admin/user/101/edit',
-            '/admin/user/1/show',
-            '/admin/user/1/delete',
-            '/admin/user/batch',
+            '/admin/task/101/edit',
+            '/admin/task/1/show',
+            '/admin/task/1/delete',
+            '/admin/task/batch',
         ];
     }
 }
