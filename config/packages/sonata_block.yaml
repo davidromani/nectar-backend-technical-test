@@ -1,5 +1,4 @@
 sonata_block:
-    http_cache: false
     blocks:
         sonata.admin.block.admin_list:
             contexts: [ 'admin' ]
