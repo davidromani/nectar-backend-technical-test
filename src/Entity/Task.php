@@ -63,7 +63,6 @@ class Task extends AbstractBase
     #[ORM\Column(type: Types::INTEGER, nullable: false, options: ['default' => TaskStatusEnum::PENDING->value])]
     private int $status = TaskStatusEnum::PENDING->value;
 
-    #[Assert\Date]
     #[Assert\NotNull]
     #[Groups(['task:write'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false)]
