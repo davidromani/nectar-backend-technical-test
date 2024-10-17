@@ -3,6 +3,7 @@ imports:
 
 parameters:
     app_default_locale: '%env(string:APP_DEFAULT_LOCALE)%'
+    app_version: '%env(string:APP_VERSION)%'
     app_project_title: '%env(string:APP_PROJECT_TITLE)%'
 
 services:
@@ -15,3 +16,9 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+    # menus
+    App\Menu\AdminTopRightNavMenuBuilder:
+        arguments:
+            - '@knp_menu.factory'
+        tags:
+            - { name: 'knp_menu.menu_builder', method: 'createTopRightUserNavMenu', alias: 'admin_user_top_right_nav_menu' }

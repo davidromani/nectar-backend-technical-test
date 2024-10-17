@@ -1,6 +1,6 @@
 api_platform:
     title: '%app_project_title% API'
-    version: '1.0.0'
+    version: '%app_version%'
     show_webby: false
     defaults:
         stateless: true

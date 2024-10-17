@@ -1,0 +1,35 @@
+{% extends "@SonataAdmin/standard_layout.html.twig" %}
+
+{# override css includes #}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/admin.css') }}">
+{% endblock %}
+
+{# disable Turbo to avoid form redirect responses problem #}
+{% block html_attributes %}{{ parent() }} data-turbo=false{% endblock %}
+
+{# custom sidebar before meunu #}
+{% block side_bar_before_nav %}
+    {% if app_is_in_staging_mode %}
+        <div class="alert alert-warning no-margin" style="border-radius:0">
+            <i class="fas fa-exclamation-triangle fa-fw"></i> staging environment
+        </div>
+    {% endif %}
+{% endblock %}
+
+{# custom sidebar footer #}
+{% block side_bar_after_nav %}
+    <p class="text-left small" style="color:#DDD;padding:120px 0 0 20px;">
+        {{ app_version }}<br>
+        <i class="fa fa-code"></i> Developed by <a href="https://www.nectarestudio.com" target="_blank">{{ app_project_title }}</a><br>
+        <i class="fa fa-copyright"></i> {{ 'now' | date('Y') }}
+    </p>
+{% endblock %}
+
+{# custom top menu #}
+{% block sonata_top_nav_menu %}
+    <div class="navbar-custom-menu">
+        {{ knp_menu_render('admin_user_top_right_nav_menu', {'currentClass': 'active', 'allow_safe_labels': true}) }}
+    </div>
+{% endblock %}
