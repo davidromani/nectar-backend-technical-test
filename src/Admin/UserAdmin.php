@@ -30,6 +30,7 @@ final class UserAdmin extends AbstractBaseAdmin
         $filter
             ->add('name')
             ->add('email')
+            ->add('active')
         ;
     }
 
@@ -48,6 +49,24 @@ final class UserAdmin extends AbstractBaseAdmin
                 FieldDescriptionInterface::TYPE_STRING,
                 [
                     'editable' => true,
+                ]
+            )
+            ->add(
+                'tasksAmount',
+                FieldDescriptionInterface::TYPE_INTEGER,
+                [
+                    'editable' => false,
+                    'header_class' => 'text-right',
+                    'row_align' => 'right',
+                ]
+            )
+            ->add(
+                'active',
+                FieldDescriptionInterface::TYPE_BOOLEAN,
+                [
+                    'editable' => true,
+                    'header_class' => 'text-center',
+                    'row_align' => 'center',
                 ]
             )
             ->add(
@@ -78,6 +97,16 @@ final class UserAdmin extends AbstractBaseAdmin
             )
             ->add('name')
             ->add('email')
+            ->add('password')
+            ->end()
+            ->with(
+                'Controls',
+                [
+                    'class' => 'col-md-3',
+                    'box_class' => 'box box-success',
+                ]
+            )
+            ->add('active')
             ->end()
         ;
     }

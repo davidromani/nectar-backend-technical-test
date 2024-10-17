@@ -70,6 +70,11 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
         return $this->tasks;
     }
 
+    public function getTasksAmount(): int
+    {
+        return $this->getTasks()->count();
+    }
+
     public function setTasks(Collection $tasks): self
     {
         $this->tasks = $tasks;
