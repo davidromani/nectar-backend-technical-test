@@ -7,13 +7,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class UserApiTest extends BaseApiTest
 {
-    private const string BASE_URL = '/api/users';
+    public const string BASE_URL = '/api/users';
 
     public function testPost(): void
     {
         $email = sprintf('%s@test.com', uniqid('', true));
         $totalUsersAmount = $this->em->getRepository(User::class)->getTotalUsersAmount();
-//        self::assertEquals(100, $totalUsersAmount);
+        self::assertEquals(100, $totalUsersAmount);
         $this->kernelBrowserClient->jsonRequest(
             Request::METHOD_POST,
             self::BASE_URL,
@@ -32,7 +32,7 @@ final class UserApiTest extends BaseApiTest
         self::assertArrayHasKey('email', $jsonResponse);
         self::assertArrayHasKey('password', $jsonResponse);
         self::assertEquals($email, $jsonResponse['email']);
-//        self::assertEquals($totalUsersAmount + 1, $jsonResponse['id']);
+        self::assertEquals($totalUsersAmount + 1, $jsonResponse['id']);
     }
 
     public function testBadPost(): void

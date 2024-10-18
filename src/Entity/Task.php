@@ -45,26 +45,26 @@ class Task extends AbstractBase
     use DescriptionTrait;
     use TitleTrait;
 
-    #[Groups(['task:write'])]
+    #[Groups(['task:read', 'task:write'])]
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
     private User $user;
 
     #[Assert\NotNull]
-    #[Groups(['task:write'])]
+    #[Groups(['task:read', 'task:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $title = null;
 
-    #[Groups(['task:write'])]
+    #[Groups(['task:read', 'task:write'])]
     #[ORM\Column(type: Types::TEXT, length: 4000, nullable: true)]
     private ?string $description = null;
 
-    #[Groups(['task:write'])]
+    #[Groups(['task:read', 'task:write'])]
     #[ORM\Column(type: Types::INTEGER, nullable: false, options: ['default' => TaskStatusEnum::PENDING->value])]
     private int $status = TaskStatusEnum::PENDING->value;
 
     #[Assert\NotNull]
-    #[Groups(['task:write'])]
+    #[Groups(['task:read', 'task:write'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false)]
     private ?\DateTimeInterface $date;
 

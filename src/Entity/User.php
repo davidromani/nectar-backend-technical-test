@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Traits\EmailTrait;
 use App\Entity\Traits\NameTrait;
@@ -20,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'User',
     description: 'A user.',
     operations: [
+        new Get(),
         new Post(),
     ],
     normalizationContext: [
