@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class UserApiTest extends BaseApiTest
 {
+    private const string BASE_URL = '/api/users';
+
     public function testPost(): void
     {
         $email = sprintf('%s@test.com', uniqid('', true));
@@ -14,7 +16,7 @@ final class UserApiTest extends BaseApiTest
 //        self::assertEquals(100, $totalUsersAmount);
         $this->kernelBrowserClient->jsonRequest(
             Request::METHOD_POST,
-            '/api/users',
+            self::BASE_URL,
             [
                 'name' => 'User Test API 1',
                 'email' => $email,
@@ -37,7 +39,7 @@ final class UserApiTest extends BaseApiTest
     {
         $this->kernelBrowserClient->jsonRequest(
             Request::METHOD_POST,
-            '/api/users',
+            self::BASE_URL,
             [
                 'name' => 'Bad User Test API 1',
             ],
