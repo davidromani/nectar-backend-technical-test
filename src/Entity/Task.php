@@ -6,7 +6,9 @@ use ApiPlatform\Doctrine\Orm\Filter\NumericFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Traits\DateTrait;
@@ -35,6 +37,17 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['task:write'],
     ],
     paginationItemsPerPage: 100,
+)]
+#[ApiResource(
+    uriTemplate: '/tasks/{user_id}/by-user-id.{_format}',
+    operations: [new Get()],
+    uriVariables: [
+        'user_id' => new Link(
+            fromProperty: 'user',
+            fromClass: Task::class,
+        ),
+    ],
+    normalizationContext: ['groups' => ['user:read']],
 )]
 #[ApiFilter(NumericFilter::class, properties: ['status'])]
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
