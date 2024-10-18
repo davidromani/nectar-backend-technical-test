@@ -36,7 +36,7 @@ final class UserAdminTest extends BaseAdminTest
     public static function provideNotFoundUrls(): array
     {
         return [
-            '/admin/user/101/edit',
+            '/admin/user/1000001/edit',
             '/admin/user/1/show',
             '/admin/user/1/delete',
             '/admin/user/batch',

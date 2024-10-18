@@ -59,7 +59,7 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $password = null;
 
-    private ?string $plainPassword;
+    private ?string $plainPassword = null;
 
     public function __construct()
     {
@@ -118,6 +118,13 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function addRole(string $role): self
+    {
+        $this->roles[] = $role;
 
         return $this;
     }
