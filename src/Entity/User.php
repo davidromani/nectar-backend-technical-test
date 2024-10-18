@@ -43,19 +43,19 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
 
     #[Assert\Email]
     #[Assert\NotNull]
-    #[Groups(['user:write'])]
+    #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
     private ?string $email = null;
 
     #[Assert\NotNull]
-    #[Groups(['user:write'])]
+    #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $name = null;
 
     #[ORM\Column]
     private array $roles = [];
 
-    #[Groups(['user:write'])]
+    #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $password = null;
 

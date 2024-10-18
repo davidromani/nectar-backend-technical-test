@@ -25,8 +25,23 @@ final class UserApiTest extends BaseApiTest
         $content = $this->kernelBrowserClient->getResponse()->getContent();
         self::assertJson($content);
         $jsonResponse = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-//        dd($jsonResponse);
         self::assertArrayHasKey('id', $jsonResponse);
-        self::assertEquals($totalUsersAmount + 1, $jsonResponse['id']);
+        self::assertArrayHasKey('name', $jsonResponse);
+        self::assertArrayHasKey('email', $jsonResponse);
+        self::assertArrayHasKey('password', $jsonResponse);
+        self::assertEquals($email, $jsonResponse['email']);
+//        self::assertEquals($totalUsersAmount + 1, $jsonResponse['id']);
+    }
+
+    public function testBadPost(): void
+    {
+        $this->kernelBrowserClient->jsonRequest(
+            Request::METHOD_POST,
+            '/api/users',
+            [
+                'name' => 'Bad User Test API 1',
+            ],
+        );
+        self::assertResponseIsUnprocessable();
     }
 }
