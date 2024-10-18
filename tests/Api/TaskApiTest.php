@@ -2,6 +2,7 @@
 
 namespace App\Tests\Api;
 
+use App\Entity\AbstractBase;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Enum\TaskStatusEnum;
@@ -49,13 +50,14 @@ final class TaskApiTest extends BaseApiTest
                 'title' => $taskTitle,
                 'description' => 'Task Test API 1',
                 'status' => TaskStatusEnum::PENDING->value,
-                'date' => '1234',
+                'date' => (new \DateTimeImmutable())->format(AbstractBase::DATABASE_DATE_STRING_FORMAT),
             ],
         );
         self::assertResponseIsSuccessful();
         $content = $this->kernelBrowserClient->getResponse()->getContent();
         self::assertJson($content);
         $jsonResponse = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        self::assertArrayHasKey('id', $jsonResponse);
         self::assertArrayHasKey('user', $jsonResponse);
         self::assertArrayHasKey('title', $jsonResponse);
         self::assertArrayHasKey('description', $jsonResponse);
@@ -75,6 +77,49 @@ final class TaskApiTest extends BaseApiTest
             ],
         );
         self::assertResponseIsUnprocessable();
+    }
+
+    public function testPatch(): void
+    {
+        $task = $this->em->getRepository(Task::class)->find(1);
+        $newStatusTask = $task->getStatus() === TaskStatusEnum::PENDING->value ? TaskStatusEnum::COMPLETED->value : TaskStatusEnum::PENDING->value;
+        $totalTasksAmount = $this->em->getRepository(Task::class)->getTotalTasksAmount();
+        $this->kernelBrowserClient->jsonRequest(
+            Request::METHOD_PATCH,
+            self::buildUrl(sprintf('/%s', $task->getId())),
+            [
+                'user' => sprintf('%s/%s', UserApiTest::BASE_URL, $task->getUser()->getId()),
+                'title' => $task->getTitle(),
+                'description' => $task->getDescription(),
+                'status' => $newStatusTask,
+                'date' => $task->getDate()->format(AbstractBase::DATABASE_DATE_STRING_FORMAT),
+            ],
+        );
+        self::assertResponseIsSuccessful();
+        $content = $this->kernelBrowserClient->getResponse()->getContent();
+        self::assertJson($content);
+        $jsonResponse = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        self::assertArrayHasKey('id', $jsonResponse);
+        self::assertArrayHasKey('user', $jsonResponse);
+        self::assertArrayHasKey('title', $jsonResponse);
+        self::assertArrayHasKey('description', $jsonResponse);
+        self::assertArrayHasKey('status', $jsonResponse);
+        self::assertArrayHasKey('date', $jsonResponse);
+        self::assertEquals($newStatusTask, $jsonResponse['status']);
+        self::assertEquals($totalTasksAmount, $this->em->getRepository(Task::class)->getTotalTasksAmount());
+    }
+
+    public function testBadPatch(): void
+    {
+        $totalTasksAmount = $this->em->getRepository(Task::class)->getTotalTasksAmount();
+        $this->kernelBrowserClient->jsonRequest(
+            Request::METHOD_PATCH,
+            self::buildUrl(sprintf('/%s', $totalTasksAmount + 100)),
+            [
+                'bad_key' => 'Bad Task Test API 1',
+            ],
+        );
+        self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
     public function testDelete(): void

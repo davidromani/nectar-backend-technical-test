@@ -9,3 +9,5 @@ api_platform:
     formats:
         jsonld: [ 'application/ld+json' ]
         json: [ 'application/json' ]
+    patch_formats:
+        json: [ 'application/json' ]
