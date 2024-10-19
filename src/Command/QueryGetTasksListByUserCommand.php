@@ -29,6 +29,14 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
                 ]
             ),
             new TableCell(
+                'ID',
+                [
+                    'style' => new TableCellStyle([
+                        'align' => 'right',
+                    ]),
+                ]
+            ),
+            new TableCell(
                 'User',
                 [
                     'style' => new TableCellStyle([
@@ -57,6 +65,14 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
             $this->addTableRow([
                 new TableCell(
                     $index + 1,
+                    [
+                        'style' => new TableCellStyle([
+                            'align' => 'right',
+                        ]),
+                    ]
+                ),
+                new TableCell(
+                    $userTaskDto->getId(),
                     [
                         'style' => new TableCellStyle([
                             'align' => 'right',
@@ -94,6 +110,8 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
         if ($input->getOption('show-table')) {
             $this->table->render();
         }
+        $this->io->info('Executed MySQL query');
+        $this->io->block($this->userRepository->getTasksListGroupedByUserQ()->getSQL());
 
         return Command::SUCCESS;
     }
