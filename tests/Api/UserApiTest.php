@@ -41,7 +41,17 @@ final class UserApiTest extends BaseApiTest
             Request::METHOD_POST,
             self::BASE_URL,
             [
-                'name' => 'Bad User Test API 1',
+                'name' => 'Bad User Test API 2',
+            ],
+        );
+        self::assertResponseIsUnprocessable();
+        $this->kernelBrowserClient->jsonRequest(
+            Request::METHOD_POST,
+            self::BASE_URL,
+            [
+                'name' => 'User Test API 3',
+                'email' => 'invalid email',
+                'password' => '1234',
             ],
         );
         self::assertResponseIsUnprocessable();
