@@ -36,6 +36,32 @@ final class TaskApiTest extends BaseApiTest
         self::assertEquals(50, $jsonResponse['totalItems']);
     }
 
+    public function testGetFilteredByUser(): void
+    {
+        $user = $this->em->getRepository(User::class)->find(1);
+        $this->kernelBrowserClient->request(Request::METHOD_GET, self::buildUrl('?page=1&status='.TaskStatusEnum::PENDING->value.'&user='.$user->getId()));
+        self::assertResponseIsSuccessful();
+        $content = $this->kernelBrowserClient->getResponse()->getContent();
+        self::assertJson($content);
+        $jsonResponse = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        self::assertArrayHasKey('totalItems', $jsonResponse);
+        self::assertEquals(1, $jsonResponse['totalItems']);
+        $this->kernelBrowserClient->request(Request::METHOD_GET, self::buildUrl('?page=1&status='.TaskStatusEnum::COMPLETED->value.'&user='.$user->getId()));
+        self::assertResponseIsSuccessful();
+        $content = $this->kernelBrowserClient->getResponse()->getContent();
+        self::assertJson($content);
+        $jsonResponse = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        self::assertArrayHasKey('totalItems', $jsonResponse);
+        self::assertEquals(0, $jsonResponse['totalItems']);
+        $this->kernelBrowserClient->request(Request::METHOD_GET, self::buildUrl('?page=1&user='.$user->getId()));
+        self::assertResponseIsSuccessful();
+        $content = $this->kernelBrowserClient->getResponse()->getContent();
+        self::assertJson($content);
+        $jsonResponse = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        self::assertArrayHasKey('totalItems', $jsonResponse);
+        self::assertEquals(1, $jsonResponse['totalItems']);
+    }
+
     public function testPost(): void
     {
         $user = $this->em->getRepository(User::class)->find(1);
