@@ -15,4 +15,13 @@ class TaskRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Task::class);
     }
+
+    public function getTotalTasksAmount(): int
+    {
+        return $this->createQueryBuilder('t')
+            ->select('COUNT(t.id) as total')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
 }

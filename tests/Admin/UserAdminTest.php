@@ -5,7 +5,7 @@ namespace App\Tests\Admin;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserAdminTest extends BaseAdminTest
+final class UserAdminTest extends BaseAdminTest
 {
     public function testSuccessfulPages(): void
     {
@@ -36,7 +36,7 @@ class UserAdminTest extends BaseAdminTest
     public static function provideNotFoundUrls(): array
     {
         return [
-            '/admin/user/101/edit',
+            '/admin/user/1000001/edit',
             '/admin/user/1/show',
             '/admin/user/1/delete',
             '/admin/user/batch',
