@@ -2,7 +2,6 @@
 
 namespace App\Command;
 
-use App\Entity\Task;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\TableCell;
@@ -19,7 +18,7 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io->info('Get total pending & completed tasks grouped by user list command');
-        $tasks = $this->taskRepository->findAll();
+        $userTasksDto = $this->usersTasksDtoSerializerManager->getDeserializedResults($this->userRepository->getTasksListGroupedByUser());
         $this->setTableHeaders([
             new TableCell(
                 '#',
@@ -42,7 +41,6 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
                 [
                     'style' => new TableCellStyle([
                         'align' => 'right',
-                        'fg' => 'yellow',
                     ]),
                 ]
             ),
@@ -51,16 +49,11 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
                 [
                     'style' => new TableCellStyle([
                         'align' => 'right',
-                        'fg' => 'green',
                     ]),
                 ]
             ),
         ]);
-        /**
-         * @var int  $index
-         * @var Task $task
-         */
-        foreach ($tasks as $index => $task) {
+        foreach ($userTasksDto as $index => $userTaskDto) {
             $this->addTableRow([
                 new TableCell(
                     $index + 1,
@@ -71,7 +64,7 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
                     ]
                 ),
                 new TableCell(
-                    $task->getTitle(),
+                    $userTaskDto->getName(),
                     [
                         'style' => new TableCellStyle([
                             'align' => 'left',
@@ -79,7 +72,7 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
                     ]
                 ),
                 new TableCell(
-                    $task->getTitle(),
+                    $userTaskDto->getPending(),
                     [
                         'style' => new TableCellStyle([
                             'align' => 'right',
@@ -88,7 +81,7 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
                     ]
                 ),
                 new TableCell(
-                    $task->getTitle(),
+                    $userTaskDto->getCompleted(),
                     [
                         'style' => new TableCellStyle([
                             'align' => 'right',

@@ -49,7 +49,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         return $this->createQueryBuilder('u')
             ->leftJoin('u.tasks', 't')
-            ->select('u.name, SUM(CASE WHEN t.status = :pending THEN 1 ELSE 0 END) AS pending, SUM(CASE WHEN t.status = :completed THEN 1 ELSE 0 END) AS completed')
+            ->select('u.name, CAST(SUM(CASE WHEN t.status = :pending THEN 1 ELSE 0 END) AS INT) AS pending, CAST(SUM(CASE WHEN t.status = :completed THEN 1 ELSE 0 END) AS INT) AS completed')
             ->setParameter('pending', TaskStatusEnum::PENDING->value)
             ->setParameter('completed', TaskStatusEnum::COMPLETED->value)
         ;

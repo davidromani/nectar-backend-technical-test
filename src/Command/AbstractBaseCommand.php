@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Manager\UsersTasksDtoSerializerManager;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\Console\Command\Command;
@@ -16,6 +17,8 @@ abstract class AbstractBaseCommand extends Command
 {
     protected TaskRepository $taskRepository;
     protected UserRepository $userRepository;
+    protected UsersTasksDtoSerializerManager $usersTasksDtoSerializerManager;
+
     protected SymfonyStyle $io;
     protected ConsoleSectionOutput $section;
     protected Table $table;
@@ -23,10 +26,12 @@ abstract class AbstractBaseCommand extends Command
     public function __construct(
         TaskRepository $taskRepository,
         UserRepository $userRepository,
+        UsersTasksDtoSerializerManager $usersTasksDtoSerializerManager,
     ) {
         parent::__construct();
         $this->taskRepository = $taskRepository;
         $this->userRepository = $userRepository;
+        $this->usersTasksDtoSerializerManager = $usersTasksDtoSerializerManager;
     }
 
     protected function configure(): void
