@@ -5,7 +5,7 @@ namespace App\Tests\Admin;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TaskAdminTest extends BaseAdminTest
+final class TaskAdminTest extends BaseAdminTest
 {
     public function testSuccessfulPages(): void
     {

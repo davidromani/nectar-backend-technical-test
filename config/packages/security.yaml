@@ -30,6 +30,10 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+            stateless: true
+            pattern: '/api(.*)'
+            context: 'api'
         admin:
             lazy: true
             pattern: '^/admin(.*)'

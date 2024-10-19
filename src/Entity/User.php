@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Traits\EmailTrait;
 use App\Entity\Traits\NameTrait;
@@ -20,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'User',
     description: 'A user.',
     operations: [
+        new Get(),
         new Post(),
     ],
     normalizationContext: [
@@ -43,23 +45,23 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
 
     #[Assert\Email]
     #[Assert\NotNull]
-    #[Groups(['user:write'])]
+    #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
     private ?string $email = null;
 
     #[Assert\NotNull]
-    #[Groups(['user:write'])]
+    #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $name = null;
 
     #[ORM\Column]
     private array $roles = [];
 
-    #[Groups(['user:write'])]
+    #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $password = null;
 
-    private ?string $plainPassword;
+    private ?string $plainPassword = null;
 
     public function __construct()
     {
@@ -118,6 +120,13 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function addRole(string $role): self
+    {
+        $this->roles[] = $role;
 
         return $this;
     }

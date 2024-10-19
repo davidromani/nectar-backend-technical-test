@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Entity\AbstractBase;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -18,6 +19,11 @@ final readonly class UserEntityEventListener
 
     public function prePersist(User $user): void
     {
+        if (is_null($user->getPlainPassword()) && $user->getPassword()) {
+            // force to rehash on API request to create a new user
+            $user->setPlainPassword($user->getPassword());
+        }
+        $user->addRole(AbstractBase::DEFAULT_ROLE_USER);
         $user->setPassword($this->getHashedPassword($user));
     }
 
