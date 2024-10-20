@@ -3,7 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Enum\TaskStatusEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -36,9 +39,30 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function getTotalUsersAmount(): int
     {
         return $this->createQueryBuilder('u')
-            ->select('COUNT(u.id) as total')
+            ->select('COUNT(u.id) AS total')
             ->getQuery()
             ->getSingleScalarResult()
         ;
+    }
+
+    public function getTasksListGroupedByUserQB(): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.tasks', 't')
+            ->select('u.id, u.name, CAST(SUM(CASE WHEN t.status = :pending THEN 1 ELSE 0 END) AS INT) AS pending, CAST(SUM(CASE WHEN t.status = :completed THEN 1 ELSE 0 END) AS INT) AS completed')
+            ->setParameter('pending', TaskStatusEnum::PENDING->value)
+            ->setParameter('completed', TaskStatusEnum::COMPLETED->value)
+            ->groupBy('u.name')
+        ;
+    }
+
+    public function getTasksListGroupedByUserQ(): Query
+    {
+        return $this->getTasksListGroupedByUserQB()->getQuery();
+    }
+
+    public function getTasksListGroupedByUser(): array
+    {
+        return $this->getTasksListGroupedByUserQ()->getArrayResult();
     }
 }
