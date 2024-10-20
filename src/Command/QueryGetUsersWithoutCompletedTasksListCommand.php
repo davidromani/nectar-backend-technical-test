@@ -10,15 +10,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'app:query:get-tasks-list-by-user',
-    description: 'Get total pending & completed tasks grouped by user list command',
+    name: 'app:query:get-users-without-completed-tasks-list',
+    description: 'Get users without completed tasks list command',
 )]
-final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
+final class QueryGetUsersWithoutCompletedTasksListCommand extends AbstractBaseCommand
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->io->info('Get total pending & completed tasks grouped by user list command');
-        $userTasksDto = $this->usersTasksDtoSerializerManager->getUserTasksListDeserializedResults($this->userRepository->getTasksListGroupedByUser());
+        $this->io->info('Get users without completed tasks list command command');
+        $usersTasksDto = $this->usersTasksDtoSerializerManager->getUserWithoutCompletedTasksListDeserializedResults($this->taskRepository->getUsersWithoutCompletedTasks());
         $this->setTableHeaders([
             new TableCell(
                 '#',
@@ -44,24 +44,8 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
                     ]),
                 ]
             ),
-            new TableCell(
-                'Pending tasks',
-                [
-                    'style' => new TableCellStyle([
-                        'align' => 'right',
-                    ]),
-                ]
-            ),
-            new TableCell(
-                'Completed tasks',
-                [
-                    'style' => new TableCellStyle([
-                        'align' => 'right',
-                    ]),
-                ]
-            ),
         ]);
-        foreach ($userTasksDto as $index => $userTaskDto) {
+        foreach ($usersTasksDto as $index => $userTaskDto) {
             $this->addTableRow([
                 new TableCell(
                     $index + 1,
@@ -87,31 +71,13 @@ final class QueryGetTasksListByUserCommand extends AbstractBaseCommand
                         ]),
                     ]
                 ),
-                new TableCell(
-                    $userTaskDto->getPending(),
-                    [
-                        'style' => new TableCellStyle([
-                            'align' => 'right',
-                            'fg' => 'yellow',
-                        ]),
-                    ]
-                ),
-                new TableCell(
-                    $userTaskDto->getCompleted(),
-                    [
-                        'style' => new TableCellStyle([
-                            'align' => 'right',
-                            'fg' => 'green',
-                        ]),
-                    ]
-                ),
             ]);
         }
         if ($input->getOption('show-table')) {
             $this->table->render();
         }
         $this->io->info('Executed MySQL query');
-        $this->io->block($this->userRepository->getTasksListGroupedByUserQ()->getSQL());
+        $this->io->block($this->taskRepository->getUsersWithoutCompletedTasksQ()->getSQL());
 
         return Command::SUCCESS;
     }
