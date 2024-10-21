@@ -1,5 +1,4 @@
 services:
-###> doctrine/doctrine-bundle ###
   database:
     image: mysql:8
     restart: always
@@ -10,9 +9,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - database_data:/var/lib/mysql
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
   www:
     build: docker/php
     ports:
@@ -23,6 +19,4 @@ services:
     restart: always
 
 volumes:
-###> doctrine/doctrine-bundle ###
   database_data:
-###< doctrine/doctrine-bundle ###
