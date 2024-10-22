@@ -12,6 +12,7 @@ Nectar Backend Technical Test v1.0
 $ git clone git@github.com:davidromani/nectar-backend-technical-test.git nectar-backend
 $ cd nectar-backend
 $ make up
+$ make install
 $ make migrations
 ```
 

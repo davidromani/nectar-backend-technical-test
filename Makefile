@@ -20,6 +20,10 @@ build:
 ## Restart the services
 restart: down up
 
+## Composer install
+install:
+	$(DOCKER) exec nectar-backend-technical-test-v1-www composer install
+
 ## Doctrine migrations
 migrations:
 	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) -f $(COMPOSE_OVERRIDE_FILE) exec nectar-backend-technical-test-v1-www php bin/console doctrine:migrations:migrate
