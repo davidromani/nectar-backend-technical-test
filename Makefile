@@ -25,14 +25,17 @@ install:
 	$(DOCKER) exec nectar-backend-technical-test-v1-www composer install
 
 ## Doctrine migrations
+.PHONY: migrations
 migrations:
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console doctrine:migrations:migrate
 
 ## Doctrine fixtures
+.PHONY: fixtures
 fixtures:
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console hautelook:fixtures:load --no-interaction
 
 ## Testing
+.PHONY: testing
 testing:
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console cache:clear --env=test
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console doctrine:database:drop --force --env=test
@@ -42,6 +45,7 @@ testing:
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/phpunit
 
 ## Part 2
+.PHONY: part2
 part2:
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console app:query:get-tasks-list-by-user --show-table
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console app:query:get-users-without-completed-tasks-list --show-table
