@@ -36,3 +36,8 @@ testing:
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console doctrine:schema:update --force --env=test
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console hautelook:fixtures:load --no-interaction --env=test
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/phpunit
+
+## Part 2
+part2:
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console app:query:get-tasks-list-by-user --show-table
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console app:query:get-users-without-completed-tasks-list --show-table

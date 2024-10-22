@@ -3,8 +3,9 @@ Nectar Backend Technical Test v1.0
 
 #### Installation requirements
 
- * Docker Compose 2.0+
  * Git 2.0+
+ * Make 3.0+
+ * Docker Compose 2.0+
 
 #### Installation instructions
 
@@ -28,6 +29,15 @@ $ make testing
 
  * To show API docs open a browser [here](http://localhost:8741/api/docs)
  * To manage users & tasks as a ROLE_ADMIN inside a private backend open a browser [here](http://localhost:8741/admin) with username `nectar` and password `N3ct4r*`
+
+
+#### Part 2
+
+Execute following Make task to get the required SQLs & show table results to check it.
+
+```bash
+$ make part2
+```
 
 #### Code Style notes
 
