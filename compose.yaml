@@ -1,5 +1,24 @@
 services:
+  www:
+    container_name: nectar-backend-technical-test-v1-www
+    build: docker/php
+    restart: always
+    environment:
+      MYSQL_DATABASE: symfony
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./docker/php/vhosts:/etc/apache2/sites-enabled
+      - ./:/var/www/project
+    links:
+      - database
+    depends_on:
+      - database
+    networks:
+      - my_network
   database:
+    container_name: nectar-backend-technical-test-v1-database
     image: mysql:8
     restart: always
     environment:
@@ -9,14 +28,10 @@ services:
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - database_data:/var/lib/mysql
-  www:
-    build: docker/php
-    ports:
-      - "8741:80"
-    volumes:
-      - ./docker/php/vhosts:/etc/apache2/sites-enabled
-      - ./:/var/www/project
-    restart: always
+    networks:
+      - my_network
 
 volumes:
   database_data:
+networks:
+  my_network:
