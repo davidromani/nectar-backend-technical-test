@@ -45,7 +45,12 @@ testing:
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/phpunit
 
 ## Part 2
-.PHONY: part2
-part2:
+.PHONY: part21
+part21:
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console app:query:get-tasks-list-by-user --show-table
+
+.PHONY: part22
+part22:
 	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console app:query:get-users-without-completed-tasks-list --show-table
+
+part2: part21 part22

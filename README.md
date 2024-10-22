@@ -37,7 +37,8 @@ $ make testing
 Execute following Make task to get the required SQLs & show table results to check it.
 
 ```bash
-$ make part2
+$ make part21
+$ make part22
 ```
 
 #### Code Style notes
