@@ -1,4 +1,5 @@
 # Variables
+DOCKER = docker
 DOCKER_COMPOSE = docker-compose
 COMPOSE_FILE = compose.yaml
 COMPOSE_OVERRIDE_FILE = compose.override.yaml
@@ -19,6 +20,32 @@ build:
 ## Restart the services
 restart: down up
 
+## Composer install
+install:
+	$(DOCKER) exec nectar-backend-technical-test-v1-www composer install
+
 ## Doctrine migrations
+.PHONY: migrations
 migrations:
-	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) -f $(COMPOSE_OVERRIDE_FILE) exec nectar-backend-technical-test-v1-www php bin/console doctrine:migrations:migrate
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console doctrine:migrations:migrate
+
+## Doctrine fixtures
+.PHONY: fixtures
+fixtures:
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console hautelook:fixtures:load --no-interaction
+
+## Testing
+.PHONY: testing
+testing:
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console cache:clear --env=test
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console doctrine:database:drop --force --env=test
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console doctrine:database:create --env=test
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console doctrine:schema:update --force --env=test
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console hautelook:fixtures:load --no-interaction --env=test
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/phpunit
+
+## Part 2
+.PHONY: part2
+part2:
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console app:query:get-tasks-list-by-user --show-table
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console app:query:get-users-without-completed-tasks-list --show-table

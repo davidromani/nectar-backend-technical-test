@@ -19,7 +19,7 @@ class BaseAdminTest extends WebTestCase
             $passwd = $kernel->getContainer()->getParameter('app_admin_user_password');
             $client = $kernel->getContainer()->get('test.client');
             $client->setServerParameters([
-                'PHP_AUTH_USER' => 'admin',
+                'PHP_AUTH_USER' => 'nectar',
                 'PHP_AUTH_PW'   => $passwd,
             ]);
             $this->kernelBrowserClient = static::getClient($client);

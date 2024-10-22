@@ -10,6 +10,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - ./docker/php/vhosts:/etc/apache2/sites-enabled
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
       - ./:/var/www/project
     links:
       - database
