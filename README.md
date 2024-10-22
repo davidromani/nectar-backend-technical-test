@@ -1,10 +1,6 @@
 Nectar Backend Technical Test v1.0
 ==================================
 
-A fresh new Symfony 6.4 LTS webapp project to manage Espai Kowo enterprise.
-
----
-
 #### Installation requirements
 
  * Docker Compose 2.0+
@@ -13,15 +9,15 @@ A fresh new Symfony 6.4 LTS webapp project to manage Espai Kowo enterprise.
 #### Installation instructions
 
 ```bash
-$ git git@github.com:Flexible-User-Experience/espai-kowo-6.git
-$ cd espai-kowo-6
+$ git git@github.com:davidromani/nectar-backend-technical-test.git nectar-backend
+$ cd nectar-backend
 $ cp env.dist .env
 $ nano .env
 $ make up
 $ make migrations
 ```
 
-Remember to edit `.env` config file according to your system environment needs.
+Remember to edit `.env` config file according to your system environment needs in app/bundle section.
 
 #### Testing suite commands
 
