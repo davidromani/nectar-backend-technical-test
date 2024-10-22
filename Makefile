@@ -26,7 +26,11 @@ install:
 
 ## Doctrine migrations
 migrations:
-	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) -f $(COMPOSE_OVERRIDE_FILE) exec nectar-backend-technical-test-v1-www php bin/console doctrine:migrations:migrate
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console doctrine:migrations:migrate
+
+## Doctrine fixtures
+fixtures:
+	$(DOCKER) exec nectar-backend-technical-test-v1-www php bin/console hautelook:fixtures:load --no-interaction
 
 ## Testing
 testing:

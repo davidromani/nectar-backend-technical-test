@@ -15,6 +15,7 @@ $ cd nectar-backend
 $ make up
 $ make install
 $ make migrations
+$ make fixtures
 ```
 
 If it's necessary, remember to edit a `.env.local` config file according to your needs as a developer.
