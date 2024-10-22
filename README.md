@@ -11,13 +11,11 @@ Nectar Backend Technical Test v1.0
 ```bash
 $ git clone git@github.com:davidromani/nectar-backend-technical-test.git nectar-backend
 $ cd nectar-backend
-$ cp env.dist .env
-$ nano .env
 $ make up
 $ make migrations
 ```
 
-Remember to edit `.env` config file according to your system environment needs in app/bundle section.
+If it's necessary, remember to edit a `.env.local` config file according to your needs as a developer.
 
 #### Testing suite commands
 
@@ -28,7 +26,7 @@ $ make testing
 #### Usage notes
 
  * To show API docs open a browser [here](http://localhost:8741/api/docs)
- * To manage users & tasks as a ROLE_ADMIN inside a private backend open a browser [here](http://localhost:8741/admin)
+ * To manage users & tasks as a ROLE_ADMIN inside a private backend open a browser [here](http://localhost:8741/admin) with username `nectar` and password `N3ct4r*`
 
 #### Code Style notes
 
