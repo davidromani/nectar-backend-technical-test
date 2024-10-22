@@ -9,7 +9,7 @@ Nectar Backend Technical Test v1.0
 #### Installation instructions
 
 ```bash
-$ git git@github.com:davidromani/nectar-backend-technical-test.git nectar-backend
+$ git clone git@github.com:davidromani/nectar-backend-technical-test.git nectar-backend
 $ cd nectar-backend
 $ cp env.dist .env
 $ nano .env
