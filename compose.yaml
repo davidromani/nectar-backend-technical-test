@@ -20,7 +20,7 @@ services:
       - my_network
   database:
     container_name: nectar-backend-technical-test-v1-database
-    image: mysql:8.3
+    image: mysql:8
     restart: always
     environment:
       MYSQL_DATABASE: symfony

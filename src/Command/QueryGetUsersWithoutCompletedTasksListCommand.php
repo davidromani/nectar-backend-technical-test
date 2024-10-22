@@ -76,7 +76,9 @@ final class QueryGetUsersWithoutCompletedTasksListCommand extends AbstractBaseCo
         if ($input->getOption('show-table')) {
             $this->table->render();
         }
-        $this->io->info('Executed MySQL query');
+        $this->io->info('Executed MySQL query 1 to obtain users ID array with completed tasks');
+        $this->io->block($this->taskRepository->getUsersIdsArrayWithCompletedTasksQ()->getSQL());
+        $this->io->info('Executed dependent MySQL query 2 to obtain users without completed tasks applying NOT IN parameter from query 1 result');
         $this->io->block($this->taskRepository->getUsersWithoutCompletedTasksQ()->getSQL());
 
         return Command::SUCCESS;
