@@ -22,3 +22,6 @@ RUN pecl install apcu && docker-php-ext-enable apcu
 
 COPY ./ /var/www/project
 WORKDIR /var/www/project
+
+RUN composer install --no-interaction --optimize-autoloader
+RUN chown -R www-data:www-data /var/www/project
