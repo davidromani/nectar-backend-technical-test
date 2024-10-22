@@ -25,7 +25,7 @@ security:
         admin_user_in_memory_provider:
             memory:
                 users:
-                    admin: { password: '%app_admin_user_password%', roles: [ 'ROLE_ADMIN' ] }
+                    nectar: { password: '%app_admin_user_password%', roles: [ 'ROLE_ADMIN' ] }
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
