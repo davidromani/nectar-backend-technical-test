@@ -19,6 +19,10 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: 'App'
+        filters:
+            user_filter:
+                enabled: true
+                class: 'App\Doctrine\Filter\UserFilter'
         dql:
             string_functions:
                 cast: 'DoctrineExtensions\Query\Mysql\Cast'

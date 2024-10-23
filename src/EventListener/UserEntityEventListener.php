@@ -2,8 +2,8 @@
 
 namespace App\EventListener;
 
-use App\Entity\AbstractBase;
 use App\Entity\User;
+use App\Enum\UserRoleEnum;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
@@ -23,7 +23,7 @@ final readonly class UserEntityEventListener
             // force to rehash on API request to create a new user
             $user->setPlainPassword($user->getPassword());
         }
-        $user->addRole(AbstractBase::DEFAULT_ROLE_USER);
+        $user->addRole(UserRoleEnum::USER->value);
         $user->setPassword($this->getHashedPassword($user));
     }
 

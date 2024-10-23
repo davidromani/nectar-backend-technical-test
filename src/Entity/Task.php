@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Doctrine\Attributes\UserAware;
 use App\Entity\Traits\DateTrait;
 use App\Entity\Traits\DescriptionTrait;
 use App\Entity\Traits\TitleTrait;
@@ -39,6 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: ['status' => 'exact', 'user' => 'exact'])]
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\Table(name: 'task')]
+#[UserAware(userFieldName: 'user_id')]
 class Task extends AbstractBase
 {
     use DateTrait;
