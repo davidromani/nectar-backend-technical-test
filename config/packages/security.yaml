@@ -32,20 +32,17 @@ security:
             security: false
         api_login:
             stateless: true
-            anonymous: true
             pattern: '^/api/login'
             context: 'api'
             json_login:
+                provider: 'app_user_provider'
                 check_path: '/api/login_check'
-                username_path: 'email'
-                password_path: 'password'
                 success_handler: 'lexik_jwt_authentication.handler.authentication_success'
                 failure_handler: 'lexik_jwt_authentication.handler.authentication_failure'
         api:
             stateless: true
             pattern: '^/api'
             context: 'api'
-            jwt: ~
         admin:
             lazy: true
             pattern: '^/admin(.*)'
@@ -66,6 +63,7 @@ security:
             pattern: '^/(.*)'
             context: 'user'
     access_control:
+        - { path: ^/api/docs, roles: 'PUBLIC_ACCESS' }
         - { path: ^/api/login, roles: 'PUBLIC_ACCESS' }
         - { path: ^/api, roles: 'IS_AUTHENTICATED_FULLY' }
         - { path: ^/admin/login$, role: 'PUBLIC_ACCESS' }
