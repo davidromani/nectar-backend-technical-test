@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -42,6 +43,7 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     use NameTrait;
 
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'user')]
+    #[OrderBy(['date' => 'DESC'])]
     private Collection $tasks;
 
     #[Assert\Email]
