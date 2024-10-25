@@ -11,6 +11,7 @@ final class UserApiTest extends BaseApiTest
 
     public function testPost(): void
     {
+        $this->createAuthenticatedClient();
         $email = sprintf('%s@test.com', uniqid('', true));
         $totalUsersAmount = $this->em->getRepository(User::class)->getTotalUsersAmount();
         self::assertEquals(100, $totalUsersAmount);
@@ -37,6 +38,7 @@ final class UserApiTest extends BaseApiTest
 
     public function testBadPost(): void
     {
+        $this->createAuthenticatedClient();
         $this->kernelBrowserClient->jsonRequest(
             Request::METHOD_POST,
             self::BASE_URL,
