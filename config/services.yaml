@@ -17,6 +17,16 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+    # Event Listeners
+    App\Doctrine\EventListener\DoctrineFilterEventListener:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@security.helper'
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest' }
+    App\EventListener\JwtEventListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'lexik_jwt_authentication.on_authentication_success', method: 'onAuthenticationSuccessResponse' }
     # menus
     App\Menu\AdminTopRightNavMenuBuilder:
         arguments:

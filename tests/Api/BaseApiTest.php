@@ -3,28 +3,57 @@
 namespace App\Tests\Api;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use ApiPlatform\Symfony\Bundle\Test\Client;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class BaseApiTest extends ApiTestCase
+abstract class BaseApiTest extends ApiTestCase
 {
-    protected ?KernelBrowser $kernelBrowserClient = null;
     protected ?EntityManagerInterface $em = null;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        if (is_null($this->kernelBrowserClient)) {
-            $kernel = static::bootKernel();
-            $client = $kernel->getContainer()->get('test.client');
-            $this->kernelBrowserClient = static::getClient($client);
-            $this->em = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        }
+        self::bootKernel();
+        $this->em = self::getContainer()->get(EntityManagerInterface::class);
     }
 
-    public function testGet(): void
+    protected function tearDown(): void
     {
-        $this->kernelBrowserClient->request(Request::METHOD_GET, '/api/docs');
-        self::assertResponseIsSuccessful();
+        $this->em->close();
+        $this->em = null;
+
+        parent::tearDown();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws \JsonException
+     */
+    protected static function createAuthenticatedClient(string $username = '1email@email.com', string $password = 'password1'): Client
+    {
+        $client = static::createClient();
+        $response = $client->request(
+            Request::METHOD_POST,
+            '/api/login_check',
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+                'base_uri' => 'https://localhost:4443',
+                'json' => [
+                    'username' => $username,
+                    'password' => $password
+                ],
+            ]
+        );
+        $token = json_decode($response->getContent(), false, 512, JSON_THROW_ON_ERROR)->token;
+        $client->setDefaultOptions(['auth_bearer' => $token]);
+
+        return $client;
     }
 }

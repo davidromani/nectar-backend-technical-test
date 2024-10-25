@@ -7,11 +7,13 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Traits\EmailTrait;
 use App\Entity\Traits\NameTrait;
+use App\Enum\UserRoleEnum;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -41,6 +43,7 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     use NameTrait;
 
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'user')]
+    #[OrderBy(['date' => 'DESC'])]
     private Collection $tasks;
 
     #[Assert\Email]
@@ -112,7 +115,7 @@ class User extends AbstractBase implements UserInterface, PasswordAuthenticatedU
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = self::DEFAULT_ROLE_USER;
+        $roles[] = UserRoleEnum::USER->value;
 
         return array_unique($roles);
     }
