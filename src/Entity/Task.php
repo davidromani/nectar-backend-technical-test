@@ -9,9 +9,11 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Doctrine\Attributes\UserAware;
 use App\Entity\Traits\DateTrait;
 use App\Entity\Traits\DescriptionTrait;
 use App\Entity\Traits\TitleTrait;
+use App\Enum\SortOrderEnum;
 use App\Enum\TaskStatusEnum;
 use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
@@ -25,8 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Post(),
-        new Patch(),
-        new Delete(),
+        new Patch(security: 'object.getUser() == user'),
+        new Delete(security: 'object.getUser() == user'),
     ],
     normalizationContext: [
         'groups' => ['task:read'],
@@ -34,11 +36,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['task:write'],
     ],
+    order: ['date' => SortOrderEnum::DESCENDING->value],
     paginationItemsPerPage: 100,
 )]
 #[ApiFilter(SearchFilter::class, properties: ['status' => 'exact', 'user' => 'exact'])]
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\Table(name: 'task')]
+#[UserAware(userFieldName: 'user_id')]
 class Task extends AbstractBase
 {
     use DateTrait;

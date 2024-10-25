@@ -29,23 +29,34 @@ class TaskRepository extends ServiceEntityRepository
         ;
     }
 
-    public function getUsersWithoutCompletedTasksQB(): QueryBuilder
+    public function getUsersIdsArrayWithCompletedTasksQB(): QueryBuilder
     {
-        $userIds = $this->createQueryBuilder('t')
+        return $this->createQueryBuilder('t')
             ->leftJoin('t.user', 'u')
             ->select('u.id')
             ->where('t.status = :completed')
             ->setParameter('completed', TaskStatusEnum::COMPLETED->value)
             ->groupBy('u.id')
-            ->getQuery()
-            ->getSingleColumnResult()
         ;
+    }
 
+    public function getUsersIdsArrayWithCompletedTasksQ(): Query
+    {
+        return $this->getUsersIdsArrayWithCompletedTasksQB()->getQuery();
+    }
+
+    public function getUsersIdsArrayWithCompletedTasks(): array
+    {
+        return $this->getUsersIdsArrayWithCompletedTasksQ()->getSingleColumnResult();
+    }
+
+    public function getUsersWithoutCompletedTasksQB(): QueryBuilder
+    {
         return $this->createQueryBuilder('u')
             ->select('us.id, us.name')
             ->from(User::class, 'us')
             ->where('us.id NOT IN (:ids)')
-            ->setParameter('ids', $userIds)
+            ->setParameter('ids', $this->getUsersIdsArrayWithCompletedTasks())
             ->groupBy('us.id')
         ;
     }

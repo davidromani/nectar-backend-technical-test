@@ -2,6 +2,12 @@ api_platform:
     title: '%app_project_title% API'
     version: '%app_version%'
     show_webby: false
+    swagger:
+        versions: [ 3 ]
+        api_keys:
+            JWT:
+                name: 'Authorization'
+                type: 'header'
     defaults:
         stateless: true
         cache_headers:

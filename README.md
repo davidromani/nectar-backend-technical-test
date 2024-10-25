@@ -28,16 +28,16 @@ $ make testing
 
 #### Usage notes
 
- * To show API docs open a browser [here](http://localhost:8741/api/docs)
- * To manage users & tasks as a ROLE_ADMIN inside a private backend open a browser [here](http://localhost:8741/admin) with username `nectar` and password `N3ct4r*`
-
+ * To show API docs open a browser [here](https://localhost:4443/api/docs)
+ * To manage users & tasks as a ROLE_ADMIN inside a private backend open a browser [here](https://localhost:4443/admin) with username `nectar` and password `N3ct4r*`
 
 #### Part 2
 
 Execute following Make task to get the required SQLs & show table results to check it.
 
 ```bash
-$ make part2
+$ make part21
+$ make part22
 ```
 
 #### Code Style notes

@@ -30,10 +30,21 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api_login:
+            stateless: true
+            pattern: '^/api/login'
+            context: 'api'
+            json_login:
+                provider: 'app_user_provider'
+                check_path: '/api/login_check'
+                success_handler: 'lexik_jwt_authentication.handler.authentication_success'
+                failure_handler: 'lexik_jwt_authentication.handler.authentication_failure'
         api:
             stateless: true
-            pattern: '/api(.*)'
+            pattern: '^/api'
             context: 'api'
+            provider: 'app_user_provider'
+            jwt: ~
         admin:
             lazy: true
             pattern: '^/admin(.*)'
@@ -54,7 +65,9 @@ security:
             pattern: '^/(.*)'
             context: 'user'
     access_control:
-        - { path: ^/api, roles: 'PUBLIC_ACCESS' }
+        - { path: ^/api/docs, roles: 'PUBLIC_ACCESS' }
+        - { path: ^/api/login, roles: 'PUBLIC_ACCESS' }
+        - { path: ^/api, roles: 'ROLE_USER' }
         - { path: ^/admin/login$, role: 'PUBLIC_ACCESS' }
         - { path: ^/admin/logout$, role: 'PUBLIC_ACCESS' }
         - { path: ^/admin/login_check$, role: 'PUBLIC_ACCESS' }

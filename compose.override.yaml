@@ -1,7 +1,8 @@
 services:
-  database:
-    ports:
-      - "3307:3306"
   www:
     ports:
       - "8741:80"
+      - "4433:443"
+  database:
+    ports:
+      - "3307:3306"
