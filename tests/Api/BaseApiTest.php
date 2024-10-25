@@ -11,18 +11,22 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class BaseApiTest extends ApiTestCase
+abstract class BaseApiTest extends ApiTestCase
 {
     protected ?EntityManagerInterface $em = null;
 
-    protected function getDoctrine(): EntityManagerInterface
+    protected function setUp(): void
     {
-        if (is_null($this->em)) {
-            static::bootKernel();
-            $this->em = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
-        }
+        self::bootKernel();
+        $this->em = self::getContainer()->get(EntityManagerInterface::class);
+    }
 
-        return $this->em;
+    protected function tearDown(): void
+    {
+        $this->em->close();
+        $this->em = null;
+
+        parent::tearDown();
     }
 
     /**

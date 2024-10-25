@@ -4,28 +4,40 @@ namespace App\Tests\Api;
 
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 final class UserApiTest extends BaseApiTest
 {
     public const string BASE_URL = '/api/users';
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws \JsonException
+     */
     public function testPost(): void
     {
-        $this->createAuthenticatedClient();
         $email = sprintf('%s@test.com', uniqid('', true));
         $totalUsersAmount = $this->em->getRepository(User::class)->getTotalUsersAmount();
         self::assertEquals(100, $totalUsersAmount);
-        $this->kernelBrowserClient->jsonRequest(
+        $response = self::createAuthenticatedClient()->request(
             Request::METHOD_POST,
             self::BASE_URL,
             [
-                'name' => 'User Test API 1',
-                'email' => $email,
-                'password' => '1234',
+                'json' => [
+                    'name' => 'User Test API 1',
+                    'email' => $email,
+                    'password' => '1234',
+                ],
             ],
         );
         self::assertResponseIsSuccessful();
-        $content = $this->kernelBrowserClient->getResponse()->getContent();
+        $content = $response->getContent();
         self::assertJson($content);
         $jsonResponse = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
         self::assertArrayHasKey('id', $jsonResponse);
@@ -36,24 +48,34 @@ final class UserApiTest extends BaseApiTest
         self::assertEquals($totalUsersAmount + 1, $jsonResponse['id']);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws \JsonException
+     */
     public function testBadPost(): void
     {
-        $this->createAuthenticatedClient();
-        $this->kernelBrowserClient->jsonRequest(
+        self::createAuthenticatedClient()->request(
             Request::METHOD_POST,
             self::BASE_URL,
             [
-                'name' => 'Bad User Test API 2',
+                'json' => [
+                    'name' => 'Bad User Test API 2',
+                ],
             ],
         );
         self::assertResponseIsUnprocessable();
-        $this->kernelBrowserClient->jsonRequest(
+        self::createAuthenticatedClient()->request(
             Request::METHOD_POST,
             self::BASE_URL,
             [
-                'name' => 'User Test API 3',
-                'email' => 'invalid email',
-                'password' => '1234',
+                'json' => [
+                    'name' => 'User Test API 3',
+                    'email' => 'invalid email',
+                    'password' => '1234',
+                ],
             ],
         );
         self::assertResponseIsUnprocessable();
